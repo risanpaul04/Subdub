@@ -71,3 +71,6 @@ typings/
 
 # VS Code
 .vscode/
+
+# Idea
+.idea/
