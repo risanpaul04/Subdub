@@ -1,15 +1,14 @@
 import { Router } from 'express';
-import authorize from "../middlewares/auth.middleware.js";
+import {authorize, authorizeRoles} from "../middlewares/auth.middleware.js";
 import {
     createSubscription,
     getAllSubscriptions,
-    getSubscription,
     getUserSubscriptions
 } from "../controllers/subscription.controller.js";
 
 const subscriptionRouter = Router();
 
-subscriptionRouter.get('/', authorize, getSubscription);
+subscriptionRouter.get('/', authorize, authorizeRoles('admin'), getAllSubscriptions);
 
 subscriptionRouter.get('/:id', getAllSubscriptions);
 

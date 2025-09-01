@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import {JWT_SECRET} from "../config/env.js";
 import User from "../models/User.model.js";
 
-const authorize = async (req, res, next) => {
+export const authorize = async (req, res, next) => {
     try {
         let token;
         if(req.headers.authorization.startsWith('Bearer')) {
@@ -26,4 +26,19 @@ const authorize = async (req, res, next) => {
     }
 }
 
-export default authorize;
+export const authorizeRoles = (...allowedRoles) => {
+    return (req, res, next) => {
+        try {
+            const user = req.user;
+            if (!user) {
+                return res.status(401).json({success: false, message: 'User not found'});
+            }
+            if (!allowedRoles.includes(user.role)) {
+                return res.status().json({success: false, message: 'Access denied'});
+            }
+            next();
+        } catch (error) {
+            next(error)
+        }
+    }
+}
